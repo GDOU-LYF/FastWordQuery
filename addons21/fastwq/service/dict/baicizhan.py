@@ -33,7 +33,7 @@ class Baicizhan(WebService):
             pass
         return self.cache_this(result)
 
-    @export('PRON')
+    @export('发音')
     def fld_phonetic(self):
         url = u'http://baicizhan.qiniucdn.com/word_audios/{}.mp3'.format(self.quote_word)
         audio_name = get_hex_name(self.unique.lower(), url, 'mp3')
@@ -52,11 +52,11 @@ class Baicizhan(WebService):
         else:
             return url
 
-    @export('PHON')
+    @export('音标')
     def fld_phon(self):
         return self._get_field('accent')
 
-    @export('IMAGE')
+    @export('图片')
     def fld_img(self):
         url = self._get_field('img')
         if url and self.bcz_download_img:
@@ -66,7 +66,7 @@ class Baicizhan(WebService):
         #return self.get_anki_label(url, 'img')
         return ''
 
-    @export([u'象形', u'Pictogram'])
+    @export(u'象形' )
     def fld_df(self):
         url = self._get_field('df')
         if url and self.bcz_download_img:
@@ -76,21 +76,33 @@ class Baicizhan(WebService):
         #return self.get_anki_label(url, 'img')
         return ''
 
-    @export(u'DEF')
+    @export(u'中文释义')
     def fld_mean(self):
         return self._get_field('mean_cn')
 
-    @export(u'EXAMPLE')
+    @export(u'英文例句')
     def fld_st(self):
-        return self._get_field('st')
+        url=self._get_field('st')
+        # str_list=url.split()
+        # for i in range(len(str_list)):#对相应的word加粗,用于Anki遮挡
+        #     if str_list[i].find(self.word)!=-1:
+        #         # str_list[i]= "<b>"+self.word+"</b>"
+        #         str_list[i]=str_list[i].replace(self.word, "<b>"+self.word+"</b>")
+        #         break
+        # return " ".join(str_list)
+        return url.replace(self.word, "<b>"+self.word+"</b>")
 
-    @export('TRANS')
+    @export('例句翻译')
     def fld_sttr(self):
-        return self._get_field('sttr')
+        return "<b>"+self._get_field('sttr')+"</b>"
 
-    @export([u'单词tv', u'TV'])
+    @export(u'单词tv')
     def fld_tv_url(self):
         video = self._get_field('tv')
         if video:
             return self.get_anki_label(video, 'video')
         return ''
+    
+    @export(u'图片2')
+    def fld_img2(self):#返回HTML代码
+        return "<img src="+self._get_field('img')+">"
